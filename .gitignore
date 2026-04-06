@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.example
+*.json
+!package.json
+!package-lock.json
+*.log
+ngrok.exe
+ngrok.zip

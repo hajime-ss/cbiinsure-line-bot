@@ -1,0 +1,19 @@
+{
+  "name": "cbiinsure-line-sys",
+  "version": "1.0.0",
+  "description": "LINE OA Document Retrieval System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@line/bot-sdk": "^9.0.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "googleapis": "^140.0.0"
+  }
+}
