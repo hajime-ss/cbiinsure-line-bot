@@ -12,18 +12,11 @@ function createLineClient() {
     });
 }
 
-function extractIdAndPlate(text) {
-    // Basic extraction: expects ID (including hyphens) followed by a space and then the plate
-    // e.g. "0-12345-67 1AB1234"
-    const regex = /^([a-zA-Z0-9\-]+)\s+(.+)$/i;
-    const match = text.trim().match(regex);
-    if (match) {
-        return {
-            id: match[1].replace(/-/g, ''),
-            plate: match[2].trim()
-        };
-    }
-    return null;
+function extractPlate(text) {
+    if (!text || text.trim().length === 0) return null;
+    return {
+        plate: text.trim()
+    };
 }
 
 async function handleMessageEvent(event, req) {
@@ -46,20 +39,20 @@ async function handleMessageEvent(event, req) {
     }
 
     const text = event.message.text;
-    const extractedData = extractIdAndPlate(text);
+    const extractedData = extractPlate(text);
 
     if (!extractedData) {
         return client.replyMessage({
             replyToken: event.replyToken,
             messages: [{
                 type: 'text',
-                text: 'Please enter your ID and car license plate, separated by a space.\n\nExample: 0-123-4567 1AB1234'
+                text: 'Please enter your car license plate.\n\nExample: 1AB1234'
             }]
         });
     }
 
     try {
-        const result = await querySheetDocs(extractedData.id, extractedData.plate);
+        const result = await querySheetDocs(extractedData.plate);
 
         if (result.found && result.clientName) {
             // Found the client in the sheet!
@@ -115,7 +108,7 @@ async function handleMessageEvent(event, req) {
                 replyToken: event.replyToken,
                 messages: [{
                     type: 'text',
-                    text: `Sorry, we couldn't find any documents matching that ID and License Plate.\n\nYou have ${remaining} attempts remaining before your account is temporarily restricted.`
+                    text: `Sorry, we couldn't find any documents matching that License Plate.\n\nYou have ${remaining} attempts remaining before your account is temporarily restricted.`
                 }]
             });
         }

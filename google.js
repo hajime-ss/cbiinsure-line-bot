@@ -29,7 +29,7 @@ const drive = google.drive({ version: 'v3', auth });
  * Queries the Google Sheet for a match based on ID and Plate.
  * Returns the Google Drive File ID if found.
  */
-async function querySheetDocs(id, plate) {
+async function querySheetDocs(plate) {
   try {
     const spreadsheetId = process.env.GOOGLE_SHEET_ID;
     if (!spreadsheetId) throw new Error("GOOGLE_SHEET_ID is missing");
@@ -47,13 +47,10 @@ async function querySheetDocs(id, plate) {
 
     // Attempt to find a match (skipping header row ideally, assuming row 0 is headers)
     for (let i = 1; i < rows.length; i++) {
-        const rowId = (rows[i][2] || '').toString().trim().replace(/-/g, '');
         const rowPlate = (rows[i][3] || '').toString().trim().toLowerCase().replace(/\s/g, '');
-        
-        const searchId = id.toString().trim().replace(/-/g, '');
         const searchPlate = plate.toString().trim().toLowerCase().replace(/\s/g, '');
 
-        if (rowId === searchId && rowPlate === searchPlate) {
+        if (rowPlate && rowPlate === searchPlate) {
             return { found: true, clientName: rows[i][1] };
         }
     }
