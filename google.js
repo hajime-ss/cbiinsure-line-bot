@@ -47,10 +47,10 @@ async function querySheetDocs(id, plate) {
 
     // Attempt to find a match (skipping header row ideally, assuming row 0 is headers)
     for (let i = 1; i < rows.length; i++) {
-        const rowId = (rows[i][2] || '').toString().trim();
+        const rowId = (rows[i][2] || '').toString().trim().replace(/-/g, '');
         const rowPlate = (rows[i][3] || '').toString().trim().toLowerCase().replace(/\s/g, '');
         
-        const searchId = id.toString().trim();
+        const searchId = id.toString().trim().replace(/-/g, '');
         const searchPlate = plate.toString().trim().toLowerCase().replace(/\s/g, '');
 
         if (rowId === searchId && rowPlate === searchPlate) {

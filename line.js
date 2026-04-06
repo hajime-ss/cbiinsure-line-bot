@@ -13,13 +13,13 @@ function createLineClient() {
 }
 
 function extractIdAndPlate(text) {
-    // Basic extraction: expects 13 digits followed by a space and then the plate
-    // e.g. "1234567890123 1AB1234"
-    const regex = /^(\d{13})\s+(.+)$/i;
+    // Basic extraction: expects ID (including hyphens) followed by a space and then the plate
+    // e.g. "0-12345-67 1AB1234"
+    const regex = /^([a-zA-Z0-9\-]+)\s+(.+)$/i;
     const match = text.trim().match(regex);
     if (match) {
         return {
-            id: match[1],
+            id: match[1].replace(/-/g, ''),
             plate: match[2].trim()
         };
     }
@@ -53,7 +53,7 @@ async function handleMessageEvent(event, req) {
             replyToken: event.replyToken,
             messages: [{
                 type: 'text',
-                text: 'Please enter your 13-digit ID and car license plate, separated by a space.\n\nExample: 1234567890123 1AB1234'
+                text: 'Please enter your ID and car license plate, separated by a space.\n\nExample: 0-123-4567 1AB1234'
             }]
         });
     }
